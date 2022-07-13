@@ -1,6 +1,8 @@
+import AddressPage from "../pageObjects/AddressPage";
 import BuyingPage from "../pageObjects/BuyingPage";
 import HomePage from "../pageObjects/HomePage";
 import LoginPage from "../pageObjects/LoginPage";
+import PaymentOptionsPage from "../pageObjects/PaymentOptionsPage";
 import RegistrationPage from "../pageObjects/RegistrationPage";
 
 describe("Juice-shop without auto login", () => {
@@ -168,7 +170,7 @@ describe("Juice-shop with Auto login", () => {
 
    });
 
-   it.only("Buy Girlie T-shirt", () => {
+   it("Buy Girlie T-shirt", () => {
     // Click on search icon
    HomePage.Button_search.click()
    // Search for Girlie
@@ -179,54 +181,82 @@ describe("Juice-shop with Auto login", () => {
   HomePage.Button_Basket.click()
   // Create page object - BasketPage
   // Click on "Checkout" button
-  BuyingPage.Button_Checkout.click()
+  BuyingPage.Button_checkout.click()
   // Create page object - SelectAddressPage
   // Select address containing "United Fakedom"
-  BuyingPage.Selection_AdressByCountry.contains("United Fakedom").click()
+  BuyingPage.Selection_adressByCountry.contains("United Fakedom").click()
   // Click Continue button
-    
+  BuyingPage.Button_continueAddress.click()
   // Create page object - DeliveryMethodPage
   // Select delivery speed Standard Delivery
+  BuyingPage.Selection_shippingSpeed.contains("Standard Delivery").click()
   // Click Continue button
+  BuyingPage.Button_continueShippingSpeed.click()
   // Create page object - PaymentOptionsPage
   // Select card that ends with "5678"
+  BuyingPage.Selection_payMethods.contains("5678").parent().find(".mat-radio-outer-circle").click({ force: true })
   // Click Continue button
+  BuyingPage.Button_continueShippingSpeed.click()
   // Create page object - OrderSummaryPage
+  BuyingPage.Button_ProductCheckout.click()
   // Click on "Place your order and pay"
   // Create page object - OrderCompletionPage
   // Validate confirmation - "Thank you for your purchase!"
-
-    
- 
+  BuyingPage.Validate_succesfulPayment.should("have.text", "Thank you for your purchase!") 
     });
 
- 
+    it("Add address", () => {
+       
+    // Click on Account
+    HomePage.Button_account.click()
+    // Click on Orders & Payment
+    HomePage.Button_accountOptions.contains("Orders & Payment").click()
+     // Click on My saved addresses
+    HomePage.Link_SavedAdresses.click()
+    // Create page object - SavedAddressesPage
+    // Click on Add New Address
+    AddressPage.Button_NewAddress.click()
+    // Create page object - CreateAddressPage
+    // Fill in the necessary information
+    AddressPage.Input_Country.type("Latvija")
+    AddressPage.Input_Name.type("Deniss")
+    AddressPage.Input_Mobile.type("25856136")
+    AddressPage.Input_ZipCode.type("LV-3113")
+    AddressPage.Input_Address.type("Jekaba 12")
+    AddressPage.Input_City.type("Engure")
+    AddressPage.Input_State.type("Kurzeme")
+    AddressPage.Button_submit.click()
+    // Click Submit button
+    // Validate that previously added address is visible
+    AddressPage.Validate_Adresses.last().should("contain.text", "Jekaba 12, Engure, Kurzeme, LV-3113")
 
-  
-  
-  
 
-  // Create scenario - Add address
-  // Click on Account
-  // Click on Orders & Payment
-  // Click on My saved addresses
-  // Create page object - SavedAddressesPage
-  // Click on Add New Address
-  // Create page object - CreateAddressPage
-  // Fill in the necessary information
-  // Click Submit button
-  // Validate that previously added address is visible
+      });
 
-  // Create scenario - Add payment option
-  // Click on Account
-  // Click on Orders & Payment
-  // Click on My payment options
-  // Create page object - SavedPaymentMethodsPage
-  // Click Add new card
-  // Fill in Name
-  // Fill in Card Number
-  // Set expiry month to 7
-  // Set expiry year to 2090
-  // Click Submit button
-  // Validate that the card shows up in the list
+      it.only("Add payment option", () => {
+       
+       // Click on Account
+      HomePage.Button_account.click()
+        // Click on Orders & Payment
+      HomePage.Button_accountOptions.contains("Orders & Payment").click()
+        // Click on My payment options
+      HomePage.Link_PaymentOptions.click()
+        // Create page object - SavedPaymentMethodsPage
+        // Click Add new card
+      PaymentOptionsPage.Button_NewCard.click()
+        // Fill in Name
+      PaymentOptionsPage.Input_Name.type("Deniss")
+        // Fill in Card Number
+      PaymentOptionsPage.Input_CardNumber.type("2121223243243232")
+        // Set expiry month to 7
+        PaymentOptionsPage.Input_ExpiredMonth.select('7')
+        // Set expiry year to 2090
+        PaymentOptionsPage.Input_ExpiredYear.select('2090')
+        // Click Submit button
+        PaymentOptionsPage.Button_Submit.click()
+        // Validate that the card shows up in the list
+        PaymentOptionsPage.Validate_Name.last().should("have.text", "Deniss")
+        PaymentOptionsPage.Validate_Expiry.last().should("have.text", "7/2090")
+          });
+  
 });

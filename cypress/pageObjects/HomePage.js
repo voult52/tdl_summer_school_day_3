@@ -72,6 +72,20 @@ class HomePage extends BasePage {
   static get Button_Basket(){
     return cy.get('.mat-toolbar-row > .mat-focus-indicator.ng-star-inserted')
   }
+  
+  static get Button_accountOptions(){
+    return cy.get('.mat-menu-content')
+  }
+
+  static get Link_SavedAdresses(){
+    return cy.get('[routerlink="/address/saved"] > span')
+  }
+  static get Link_PaymentOptions(){
+    return cy.get('[routerlink="/saved-payment-methods"] > span')
+
+  }
+
+  
 
   
 
