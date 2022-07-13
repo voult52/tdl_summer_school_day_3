@@ -80,7 +80,7 @@ describe("Juice-shop with Auto login", () => {
     // Search for Lemon
     HomePage.Input_search.type("Lemon{enter}")
     // Select a product card - Lemon Juice (500ml)
-    HomePage.Button_CardSelect.contains("Lemon Juice").click()
+    HomePage.Button_cardSelect.contains("Lemon Juice").click()
     // Validate that the card (should) contains "Sour but full of vitamins."
     HomePage.Validate_cardDescription.should("have.text", "Sour but full of vitamins.")
   });
@@ -91,7 +91,7 @@ describe("Juice-shop with Auto login", () => {
     // Search for 500ml
     HomePage.Input_search.type("500ml{enter}")
     // Select a product card - Lemon Juice (500ml)
-   HomePage.Button_CardSelect.contains("Lemon Juice").click()
+   HomePage.Button_cardSelect.contains("Lemon Juice").click()
     // Validate that the card (should) contains "Sour but full of vitamins."
     HomePage.Validate_cardDescription.should("have.text", "Sour but full of vitamins.")
 
@@ -131,7 +131,7 @@ describe("Juice-shop with Auto login", () => {
    cy.wait(180)
    HomePage.Selection_ReviewOpen.click()
    // Validate review - K33p5 y0ur ju1cy 5plu773r 70 y0ur53lf!
-   HomePage.Validate_Review.last().should("contain.text", "K33p5 y0ur ju1cy 5plu773r 70 y0ur53lf!")
+   HomePage.Validate_Review.should("contain.text", "K33p5 y0ur ju1cy 5plu773r 70 y0ur53lf!")
   });
 
   it("Add a review", () => {
@@ -233,7 +233,7 @@ describe("Juice-shop with Auto login", () => {
 
       });
 
-      it.only("Add payment option", () => {
+      it("Add payment option", () => {
        
        // Click on Account
       HomePage.Button_account.click()
@@ -255,6 +255,7 @@ describe("Juice-shop with Auto login", () => {
         // Click Submit button
         PaymentOptionsPage.Button_Submit.click()
         // Validate that the card shows up in the list
+        cy.wait(50)
         PaymentOptionsPage.Validate_Name.last().should("have.text", "Deniss")
         PaymentOptionsPage.Validate_Expiry.last().should("have.text", "7/2090")
           });
